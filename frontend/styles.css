@@ -1,0 +1,27 @@
+/* Add your CSS rules here */
+body{
+    padding: 10px;
+}
+
+/* tablet */
+@media screen and (min-width: 576px) {
+  body {
+    padding: 20px;
+  }
+}
+
+/* desktop */
+@media screen and (min-width: 1080px) {
+  body {
+    max-width: 1000px;
+    margin: auto;
+  }
+}
+
+
+
+/* @media screen and (min-width: 300px) {
+  #root {
+    color: red;
+  }
+} */
