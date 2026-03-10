@@ -33,18 +33,29 @@ async function fetchOne(city, api_key){
 async function listElementEventListener(){
     root.addEventListener("click", function(e){
         //console.log("e.target", e.target)
-        fetchOne(e.target.textContent, api_key).then(data=>displayWeather(e.target, data))
+        
+            fetchOne(e.target.textContent, api_key).then(data=>displayWeather(e.target, data))
+        
     })
 }
 
 function displayWeather(target, data){
-    //console.log(data)
-    //console.log(id)
-    //console.log(clickedElement)
-    let li = document.createElement("li")
-    li.textContent = `Temperature: ${data.current.temp_c}`
-    target.insertAdjacentElement("afterend", li)
-    //ul.appendChild(li)
+        console.log("target", target)
+        let enabledDiv = target.querySelector(".temp-enabled") //TARGET .querySelector
+        if(enabledDiv){
+            return
+        }
+        let div = document.createElement("div")
+        div.classList.add("temp-enabled")
+        let span = document.createElement("span")
+        span.textContent = `Temperature: ${data.current.temp_c}C°`
+        span.enabled = true
+        div.appendChild(span)
+        target.appendChild(div)
+        let nextElement = target.nextElementSibling
+        console.log(nextElement)
+        
+        
 }
 
 displayCountries()
