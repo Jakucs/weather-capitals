@@ -38,6 +38,7 @@ async function eventListeners(){
     root.addEventListener("click", function(e){
         console.log("e.target", e.target)
         if(e.target.classList.contains("mainLI")){
+            console.log("e.target.textContent", e.target.textContent)
             fetchOne(e.target.textContent, api_key).then(data=>displayWeather(e.target, data))
         }
 
@@ -52,7 +53,16 @@ prev.addEventListener("click" ,function(e){
     let previousID=parseInt(currentLi.id)-1 //előző id
     let previousLI = document.getElementById(previousID) //valódi előző li
     console.log("previousLI", previousLI)
-    fetchOne(e.target.textContent, api_key).then(data=>displayWeather(previousLI, data)) //e.target helyett previousLI -t adjuk át
+    console.log("e.target.textContent", e.target.textContent)
+    fetchOne(previousLI.textContent, api_key).then(data=>displayWeather(previousLI, data)) //e.target helyett previousLI -t adjuk át (displayWeather(previousLI, data))
+}) //fetchOne -nál e.target.textContent helyett previousLI.textContent-t adjuk át
+
+next.addEventListener("click" ,function(e){
+    let currentLi = document.querySelector(".temp-enabled").parentElement
+    let nextID=parseInt(currentLi.id)+1 //kövi id
+    let nextLI = document.getElementById(nextID) //valódi kövi li
+    console.log("nextID", nextID)
+    fetchOne(nextLI.textContent, api_key).then(data=>displayWeather(nextLI, data)) //e.target helyett nextLI -t adjuk át
 }) 
 
 
