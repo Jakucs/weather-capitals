@@ -4,8 +4,8 @@ let api_key = "9f470b0b7f1440689e693427260903"
 let root = document.getElementById("root")
 let ul = document.getElementById("ul")
 
-// let prev = document.getElementById("prev")
-// let next = document.getElementById("next")
+let prev = document.getElementById("prev")
+let next = document.getElementById("next")
 
 async function fetchData(){
     let res = await fetch(URL)
@@ -36,16 +36,24 @@ async function fetchOne(city, api_key){
 
 async function eventListeners(){
     root.addEventListener("click", function(e){
-        //console.log("e.target", e.target)
+        console.log("e.target", e.target)
         if(e.target.classList.contains("mainLI")){
             fetchOne(e.target.textContent, api_key).then(data=>displayWeather(e.target, data))
         }
 
-        if(e.target.classList.contains("btn")){
-            fetchOne(e.target.textContent, api_key).then(data=>displayWeather(e.target, data))
-        }
+        // if(e.target.classList.contains("next")){
+        //     fetchOne(e.target.textContent, api_key).then(data=>displayWeather(e.target, data))
+        // }
     })
 }
+
+prev.addEventListener("click" ,function(e){
+    let currentLi = document.querySelector(".temp-enabled").parentElement
+    let previousID=parseInt(currentLi.id)-1 //előző id
+    let previousLI = document.getElementById(previousID) //valódi előző li
+    console.log("previousLI", previousLI)
+    fetchOne(e.target.textContent, api_key).then(data=>displayWeather(previousLI, data)) //e.target helyett previousLI -t adjuk át
+}) 
 
 
 function displayWeather(target, data){
@@ -68,8 +76,8 @@ function displayWeather(target, data){
         
         target.appendChild(div)
 
-        let nextElement = target.nextElementSibling
-        console.log(nextElement)   
+        // let nextElement = target.nextElementSibling
+        // console.log(nextElement)   
 }
 
 displayCountries()
