@@ -68,13 +68,19 @@ function buttonEventListeners(){
     }) 
 }
 
-function checkValidPosition(id){
-    if(id>249){
-        return false
-    } else if(id<0){
-        return false
-    } else{
-        return true
+function checkButtonDisable(id){
+    if(id==0){
+        prev.disabled = true
+        next.disabled = false
+    }   
+    else if(id==249){
+        prev.disabled = false
+        next.disabled = true
+    }
+    
+    else if (id>0) {
+        prev.disabled=false
+        next.disabled=false
     }
 }
 
@@ -91,15 +97,15 @@ function displayWeather(target, data){
         //console.log("enabledDiv", document.querySelector(".temp-enabled"))
         let id = target.id
         console.log(id)
-        if(target.id==0){
+        if(checkButtonDisable(id)){
             prev.disabled = true
             next.disabled = false
-        }         else if(target.id==249){
+        }         else if(checkButtonDisable(id)){
             prev.disabled = false
             next.disabled = true
         }
         
-        else if (target.id>0) {
+        else if (checkButtonDisable(id)) {
             prev.disabled=false
             next.disabled=false
         }
