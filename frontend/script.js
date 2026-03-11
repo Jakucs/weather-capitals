@@ -48,6 +48,17 @@ async function mainLIEventListener(){
     })
 }
 
+async function fetchBorders(cca3){
+    let url = "https://jvvkjy8utk.execute-api.eu-central-1.amazonaws.com/tourist/api/countries/by-cca3/"
+    let finalURL = `${url}${cca3}`
+    let res = await fetch(finalURL)
+    let data = await res.json()
+    let borders = data.borders
+    console.log(borders)
+    return borders
+}
+fetchBorders("HUN")
+
 function buttonEventListeners(){
     prev.addEventListener("click" ,function(e){
         let currentLi = document.querySelector(".temp-enabled").parentElement
@@ -85,7 +96,7 @@ function checkButtonDisable(id){
 }
 
 function displayWeather(target, data){
-        console.log("target", target)
+        //console.log("target", target)
         let enabledDiv = target.querySelector(".temp-enabled") //TARGET .querySelector
         if(enabledDiv){
             return
