@@ -93,23 +93,9 @@ function displayWeather(target, data){
         if(document.querySelector(".temp-enabled")){
             document.querySelector(".temp-enabled").remove()
         }
-
         //console.log("enabledDiv", document.querySelector(".temp-enabled"))
         let id = target.id
-        console.log(id)
-        if(checkButtonDisable(id)){
-            prev.disabled = true
-            next.disabled = false
-        }         else if(checkButtonDisable(id)){
-            prev.disabled = false
-            next.disabled = true
-        }
-        
-        else if (checkButtonDisable(id)) {
-            prev.disabled=false
-            next.disabled=false
-        }
-
+        checkButtonDisable(id)
 
         let div = document.createElement("div")
         div.classList.add("temp-enabled")
