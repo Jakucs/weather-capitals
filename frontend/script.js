@@ -19,11 +19,45 @@ async function displayCountries(){
     let index = 0;
     let sortedDatas = datas.sort((a, b)=> a.name.common.localeCompare(b.name.common))
     for(let country of sortedDatas){
+        //console.log(country.name.common, country.cca3)
         let li = document.createElement("li")
         li.textContent = `${country.name.common} (${country.capitals[0]})`
         li.id = index++
         li.classList.add("mainLI")
+        li.dataset.cca3=country.cca3 //ÚJ
         ul.appendChild(li)
+    }
+}
+
+async function displayBorderCountries(borders){
+    let countries = await fetchData()
+    let countryNames = [];
+    //console.log(countries)
+    for(let border of borders){
+        //console.log(typeof border)
+        for(let country of countries){
+            //console.log(typeof country.cca3)
+            if(border == country.cca3){
+                countryNames.push(country.name.common)
+            }
+        }
+    }
+    console.log(countryNames)
+        let enabledDiv = document.querySelector(".temp-enabled") //TARGET .querySelector
+        if(enabledDiv){
+            return
+        }
+        if(document.querySelector(".temp-enabled")){
+            document.querySelector(".temp-enabled").remove()
+        }
+
+    for(let country of countryNames){
+        let div = document.createElement("div")
+        div.classList.add("temp-enabled")
+        let span = document.createElement("span")
+        span.enabled = true
+        div.appendChild(span)
+        enabledDiv.appendChild(div)
     }
 }
 
@@ -36,10 +70,11 @@ async function fetchOne(city, api_key){
 
 async function mainLIEventListener(){
     root.addEventListener("click", function(e){
-        //console.log("e.target", e.target)
+        //console.log("e.target.cca3", e.target.dataset.cca3)
         if(e.target.classList.contains("mainLI")){
             //console.log("e.target.textContent", e.target.textContent)
             fetchOne(e.target.textContent, api_key).then(data=>displayWeather(e.target, data))
+            fetchBorders(e.target.dataset.cca3).then(data=>displayBorderCountries(data))
         }
 
         // if(e.target.classList.contains("next")){
@@ -54,10 +89,9 @@ async function fetchBorders(cca3){
     let res = await fetch(finalURL)
     let data = await res.json()
     let borders = data.borders
-    console.log(borders)
     return borders
 }
-fetchBorders("HUN")
+
 
 function buttonEventListeners(){
     prev.addEventListener("click" ,function(e){
