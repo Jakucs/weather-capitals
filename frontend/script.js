@@ -43,22 +43,24 @@ async function displayBorderCountries(borders){
         }
     }
     console.log(countryNames)
+    
         let enabledDiv = document.querySelector(".temp-enabled") //TARGET .querySelector
-        if(enabledDiv){
+/*         if(enabledDiv){
             return
         }
         if(document.querySelector(".temp-enabled")){
             document.querySelector(".temp-enabled").remove()
-        }
+        } */
 
-    for(let country of countryNames){
-        let div = document.createElement("div")
-        div.classList.add("temp-enabled")
-        let span = document.createElement("span")
-        span.enabled = true
-        div.appendChild(span)
-        enabledDiv.appendChild(div)
-    }
+        for(let country of countryNames){
+            let div = document.createElement("div")
+            div.classList.add("temp-enabled")
+            let span = document.createElement("span")
+            span.enabled = true
+            span.textContent=country
+            div.appendChild(span)
+            enabledDiv.appendChild(div)
+        }
 }
 
 async function fetchOne(city, api_key){
