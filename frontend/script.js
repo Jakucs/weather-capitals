@@ -34,11 +34,11 @@ async function fetchOne(city, api_key){
     return data
 }
 
-async function eventListeners(){
+async function mainLIEventListener(){
     root.addEventListener("click", function(e){
-        console.log("e.target", e.target)
+        //console.log("e.target", e.target)
         if(e.target.classList.contains("mainLI")){
-            console.log("e.target.textContent", e.target.textContent)
+            //console.log("e.target.textContent", e.target.textContent)
             fetchOne(e.target.textContent, api_key).then(data=>displayWeather(e.target, data))
         }
 
@@ -48,23 +48,35 @@ async function eventListeners(){
     })
 }
 
-prev.addEventListener("click" ,function(e){
-    let currentLi = document.querySelector(".temp-enabled").parentElement
-    let previousID=parseInt(currentLi.id)-1 //előző id
-    let previousLI = document.getElementById(previousID) //valódi előző li
-    console.log("previousLI", previousLI)
-    console.log("e.target.textContent", e.target.textContent)
-    fetchOne(previousLI.textContent, api_key).then(data=>displayWeather(previousLI, data)) //e.target helyett previousLI -t adjuk át (displayWeather(previousLI, data))
-}) //fetchOne -nál e.target.textContent helyett previousLI.textContent-t adjuk át
+function buttonEventListeners(){
+    prev.addEventListener("click" ,function(e){
+        let currentLi = document.querySelector(".temp-enabled").parentElement
+        let previousID=parseInt(currentLi.id)-1 //előző id
+        let previousLI = document.getElementById(previousID) //valódi előző li
+        //console.log("previousLI", previousLI)
+        //console.log("e.target.textContent", e.target.textContent)
+        fetchOne(previousLI.textContent, api_key).then(data=>displayWeather(previousLI, data)) //e.target helyett previousLI -t adjuk át (displayWeather(previousLI, data))
+    }) //fetchOne -nál e.target.textContent helyett previousLI.textContent-t adjuk át
+    
+    next.addEventListener("click" ,function(e){
+        let currentLi = document.querySelector(".temp-enabled").parentElement
+        let nextID=parseInt(currentLi.id)+1 //kövi id
+        let nextLI = document.getElementById(nextID) //valódi kövi li
+        console.log("nextID", nextID)
+        fetchOne(nextLI.textContent, api_key).then(data=>displayWeather(nextLI, data)) //e.target helyett nextLI -t adjuk át
+        
+    }) 
+}
 
-next.addEventListener("click" ,function(e){
-    let currentLi = document.querySelector(".temp-enabled").parentElement
-    let nextID=parseInt(currentLi.id)+1 //kövi id
-    let nextLI = document.getElementById(nextID) //valódi kövi li
-    console.log("nextID", nextID)
-    fetchOne(nextLI.textContent, api_key).then(data=>displayWeather(nextLI, data)) //e.target helyett nextLI -t adjuk át
-}) 
-
+function checkValidPosition(id){
+    if(id>249){
+        return false
+    } else if(id<0){
+        return false
+    } else{
+        return true
+    }
+}
 
 function displayWeather(target, data){
         console.log("target", target)
@@ -76,19 +88,32 @@ function displayWeather(target, data){
             document.querySelector(".temp-enabled").remove()
         }
 
+        //console.log("enabledDiv", document.querySelector(".temp-enabled"))
+        let id = target.id
+        console.log(id)
+        if(target.id==0){
+            prev.disabled = true
+            next.disabled = false
+        }         else if(target.id==249){
+            prev.disabled = false
+            next.disabled = true
+        }
+        
+        else if (target.id>0) {
+            prev.disabled=false
+            next.disabled=false
+        }
+
+
         let div = document.createElement("div")
         div.classList.add("temp-enabled")
         let span = document.createElement("span")
         span.textContent = `Temperature: ${data.current.temp_c}C°`
         span.enabled = true
         div.appendChild(span)
-
-        
         target.appendChild(div)
-
-        // let nextElement = target.nextElementSibling
-        // console.log(nextElement)   
 }
 
 displayCountries()
-eventListeners()
+mainLIEventListener()
+buttonEventListeners()
