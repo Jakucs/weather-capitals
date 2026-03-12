@@ -54,7 +54,7 @@ async function displayBorderCapitals(borders){
 
         for(let capital of capitalNames){
             let div = document.createElement("div")
-            div.classList.add("temp-enabled")
+            div.classList.add("temp-enabled", "city-enabled")
             let span = document.createElement("span")
             span.enabled = true
             span.style.fontWeight = "50"
@@ -62,11 +62,31 @@ async function displayBorderCapitals(borders){
             div.appendChild(span)
             enabledDiv.appendChild(div)
         }
+
+        searchCountry()
 }
 
-function searchCountry(selectedCountry){
-    document.querySelector("")
+async function searchCountry(){
+    let city = document.querySelector(".city-enabled")
+    root.addEventListener("click", function(e){
+    console.log("e.target in SEARCH:", e.target)
+    let selectedCapital = e.target.textContent
+    console.log(selectedCapital)
+    fetchOne(selectedCapital, api_key).then(data=>{
+        let temperature = data.current.temp_c
+        let p = document.createElement("p")
+        p.innerHTML = `<br> ${temperature} C°`
+        e.target.insertAdjacentElement("afterend", p)
+        console.log("p.parentElement", p.parentElement)
+        //div.parentElement.appendChild(div)
+    })
+    // fetchOne(selectedCapital, api_key).then(data=>displayWeather(e.target, data))
+    // fetchBorders(e.target.dataset.cca3).then(data=>displayBorderCapitals(data))
+})
 }
+
+
+
 
 
 
@@ -79,7 +99,7 @@ async function fetchOne(city, api_key){
 
 async function mainLIEventListener(){
     root.addEventListener("click", function(e){
-        //console.log("e.target.cca3", e.target.dataset.cca3)
+        //console.log("e.target in MAIN:", e.target)
         if(e.target.classList.contains("mainLI")){
             //console.log("e.target.textContent", e.target.textContent)
             fetchOne(e.target.textContent, api_key).then(data=>displayWeather(e.target, data))
