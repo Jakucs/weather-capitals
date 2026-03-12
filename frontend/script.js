@@ -29,20 +29,20 @@ async function displayCountries(){
     }
 }
 
-async function displayBorderCountries(borders){
+async function displayBorderCapitals(borders){
     let countries = await fetchData()
-    let countryNames = [];
+    let capitalNames = [];
     //console.log(countries)
     for(let border of borders){
         //console.log(typeof border)
         for(let country of countries){
             //console.log(typeof country.cca3)
             if(border == country.cca3){
-                countryNames.push(country.name.common)
+                capitalNames.push(country.capitals[0])
             }
         }
     }
-    console.log(countryNames)
+    console.log(capitalNames)
     
         let enabledDiv = document.querySelector(".temp-enabled") //TARGET .querySelector
 /*         if(enabledDiv){
@@ -52,16 +52,23 @@ async function displayBorderCountries(borders){
             document.querySelector(".temp-enabled").remove()
         } */
 
-        for(let country of countryNames){
+        for(let capital of capitalNames){
             let div = document.createElement("div")
             div.classList.add("temp-enabled")
             let span = document.createElement("span")
             span.enabled = true
-            span.textContent=country
+            span.style.fontWeight = "50"
+            span.textContent=capital
             div.appendChild(span)
             enabledDiv.appendChild(div)
         }
 }
+
+function searchCountry(selectedCountry){
+    document.querySelector("")
+}
+
+
 
 async function fetchOne(city, api_key){
     let finalURL = `http://api.weatherapi.com/v1/current.json?key=${api_key}&q=${city}`
@@ -76,7 +83,7 @@ async function mainLIEventListener(){
         if(e.target.classList.contains("mainLI")){
             //console.log("e.target.textContent", e.target.textContent)
             fetchOne(e.target.textContent, api_key).then(data=>displayWeather(e.target, data))
-            fetchBorders(e.target.dataset.cca3).then(data=>displayBorderCountries(data))
+            fetchBorders(e.target.dataset.cca3).then(data=>displayBorderCapitals(data))
         }
 
         // if(e.target.classList.contains("next")){
@@ -103,7 +110,7 @@ function buttonEventListeners(){
         //console.log("previousLI", previousLI)
         //console.log("e.target.textContent", e.target.textContent)
         fetchOne(previousLI.textContent, api_key).then(data=>displayWeather(previousLI, data)) //e.target helyett previousLI -t adjuk át (displayWeather(previousLI, data))
-        fetchBorders(previousLI.dataset.cca3).then(data=>displayBorderCountries(data))
+        fetchBorders(previousLI.dataset.cca3).then(data=>displayBorderCapitals(data))
     }) //fetchOne -nál e.target.textContent helyett previousLI.textContent-t adjuk át
     
     next.addEventListener("click" ,function(e){
@@ -112,7 +119,7 @@ function buttonEventListeners(){
         let nextLI = document.getElementById(nextID) //valódi kövi li
         console.log("nextID", nextID)
         fetchOne(nextLI.textContent, api_key).then(data=>displayWeather(nextLI, data)) //e.target helyett nextLI -t adjuk át
-        fetchBorders(nextLI.dataset.cca3).then(data=>displayBorderCountries(data))
+        fetchBorders(nextLI.dataset.cca3).then(data=>displayBorderCapitals(data))
     }) 
 }
 
