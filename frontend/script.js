@@ -63,28 +63,39 @@ async function displayBorderCapitals(borders){
             enabledDiv.appendChild(div)
         }
 
-        searchCountry()
-}
-
-async function searchCountry(){
+    }
+    
+    async function searchCountry(){
+    console.log("lefut")
     let city = document.querySelector(".city-enabled")
+    console.log("city", city)
     root.addEventListener("click", function(e){
-    console.log("e.target in SEARCH:", e.target)
-    let selectedCapital = e.target.textContent
-    console.log(selectedCapital)
-    fetchOne(selectedCapital, api_key).then(data=>{
-        let temperature = data.current.temp_c
-        let p = document.createElement("p")
-        p.innerHTML = `<br> ${temperature} C°`
-        e.target.insertAdjacentElement("afterend", p)
-        console.log("p.parentElement", p.parentElement)
-        //div.parentElement.appendChild(div)
+        if(!e.target.classList.contains("city-enabled")) return
+        console.log("e.target in SEARCH:", e.target)
+        let selectedCapital = e.target.textContent
+        console.log(selectedCapital)
+        fetchOne(selectedCapital, api_key).then(data=>{
+            let temperature = data.current.temp_c
+
+            let enabledElement = e.target.querySelectorAll(".city-temp-enabled")
+            console.log("enabledElement", enabledElement)
+            if(enabledElement){
+                
+                let p = document.createElement("p")
+                p.innerHTML = `<br> ${temperature} C°`
+                p.classList.add("city-temp-enabled")
+                e.target.insertAdjacentElement("afterend", p)
+                console.log("p.parentElement", p.parentElement)
+
+            }
+            //div.parentElement.appendChild(div)
+        })
+        // fetchOne(selectedCapital, api_key).then(data=>displayWeather(e.target, data))
+        // fetchBorders(e.target.dataset.cca3).then(data=>displayBorderCapitals(data))
     })
-    // fetchOne(selectedCapital, api_key).then(data=>displayWeather(e.target, data))
-    // fetchBorders(e.target.dataset.cca3).then(data=>displayBorderCapitals(data))
-})
 }
 
+searchCountry()
 
 
 
