@@ -103,6 +103,7 @@ function buttonEventListeners(){
         //console.log("previousLI", previousLI)
         //console.log("e.target.textContent", e.target.textContent)
         fetchOne(previousLI.textContent, api_key).then(data=>displayWeather(previousLI, data)) //e.target helyett previousLI -t adjuk át (displayWeather(previousLI, data))
+        fetchBorders(previousLI.dataset.cca3).then(data=>displayBorderCountries(data))
     }) //fetchOne -nál e.target.textContent helyett previousLI.textContent-t adjuk át
     
     next.addEventListener("click" ,function(e){
@@ -111,7 +112,7 @@ function buttonEventListeners(){
         let nextLI = document.getElementById(nextID) //valódi kövi li
         console.log("nextID", nextID)
         fetchOne(nextLI.textContent, api_key).then(data=>displayWeather(nextLI, data)) //e.target helyett nextLI -t adjuk át
-        
+        fetchBorders(nextLI.dataset.cca3).then(data=>displayBorderCountries(data))
     }) 
 }
 
