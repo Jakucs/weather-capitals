@@ -4,23 +4,34 @@ let currencies_request_URL = `https://api.freecurrencyapi.com/v1/latest?apikey=$
 //currencies_request_URL
 // &currencies=EUR%2CUSD%2CCAD&base_currency=EUR
 
-function fetchCurrencies(currencies_request_URL, currency){
-    console.log("currency", currency)
-    let finalURL = `${currencies_request_URL}&currencies=${cca3}&currencies=USD,EUR,GBP`
+async function fetchCurrencies(currencies_request_URL, currencyCode){
+    console.log("currency", currencyCode)
+    let finalURL = `${currencies_request_URL}&base_currency=USD&currencies=${currencyCode},EUR,GBP`
+    try{
+        const res = await fetch(finalURL)
+        if(!res.ok){
+            throw new Error("Currency not available")
+        }
+            const data = await res.json()
+            //console.log(data)
+            return data
+    }catch(error){
+        let errorMessage = `Currency is not available🤔 ${error.message}`
+        console.log(errorMessage)
+    }
 }
 
 async function convertToCurrencyByCCA3(cca3){
     const res = await fetch(`https://restcountries.com/v3.1/alpha/${cca3}`);
     //const data = res.json().then(data=>fetchCurrencies(currencies_request_URL, data[0].currencies[0]))
     const data = await res.json()
-    
     let currencies = data[0].currencies;
     let currencyCode = Object.keys(currencies)[0]
     console.log(currencyCode)
-
-    //.then(data=>console.log(data[0].Object.keys(currencies)))
+    let result = await fetchCurrencies(currencies_request_URL, currencyCode)
+    return result
 }
-convertToCurrencyByCCA3("HUN")
+//convertToCurrencyByCCA3("HUN")
 
 // Add your Javascript code here
 let URL = "https://jvvkjy8utk.execute-api.eu-central-1.amazonaws.com/tourist/api/countries/all"
@@ -197,9 +208,22 @@ function checkButtonDisable(id){
         next.disabled=false
     }
 }
+//ITT HAGYTAM ABBA (+LEJEBB)
+/* async function displayCurrencies(cca3){
+        let currencies = await convertToCurrencyByCCA3(cca3)
+        console.log(currencies)
+} */
 
-function displayWeather(target, data){
-        //console.log("target", target)
+
+async function displayWeather(target, data){
+        console.log("target", target)
+
+        //Display Currency (később function):
+    //ITT HAGYTAM ABBA 
+        displayCurrencies(target.dataset.cca3)
+
+        //...................................
+
         let enabledDiv = target.querySelector(".temp-enabled") //TARGET .querySelector
         if(enabledDiv){
             return
