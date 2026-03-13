@@ -65,13 +65,20 @@ async function displayBorderCapitals(borders){
 
     }
     
-    async function searchCountry(){
+async function searchCountry(){
     console.log("lefut")
     let city = document.querySelector(".city-enabled")
     console.log("city", city)
     root.addEventListener("click", function(e){
-        if(!e.target.classList.contains("city-enabled")) return
+        console.log("e.target", e.target.parentElement)
+        if(!e.target.parentElement.classList.contains("city-enabled")) return
         console.log("e.target in SEARCH:", e.target)
+        let temp_enabled = document.querySelector(".temp-enabled")
+        let p = temp_enabled.querySelector("p")
+        if(p){
+            p.remove()
+        }
+       console.log("temp_enabled", temp_enabled)
         let selectedCapital = e.target.textContent
         console.log(selectedCapital)
         fetchOne(selectedCapital, api_key).then(data=>{
