@@ -1,3 +1,27 @@
+//exchanges apikey
+let currencies_api_key = "fca_live_H9DzyhgRD2PWqkxhf7SV03fHP03gG1tRg4vrOhQx"
+let currencies_request_URL = `https://api.freecurrencyapi.com/v1/latest?apikey=${currencies_api_key}`
+//currencies_request_URL
+// &currencies=EUR%2CUSD%2CCAD&base_currency=EUR
+
+function fetchCurrencies(currencies_request_URL, currency){
+    console.log("currency", currency)
+    let finalURL = `${currencies_request_URL}&currencies=${cca3}&currencies=USD,EUR,GBP`
+}
+
+async function convertToCurrencyByCCA3(cca3){
+    const res = await fetch(`https://restcountries.com/v3.1/alpha/${cca3}`);
+    //const data = res.json().then(data=>fetchCurrencies(currencies_request_URL, data[0].currencies[0]))
+    const data = await res.json()
+    
+    let currencies = data[0].currencies;
+    let currencyCode = Object.keys(currencies)[0]
+    console.log(currencyCode)
+
+    //.then(data=>console.log(data[0].Object.keys(currencies)))
+}
+convertToCurrencyByCCA3("HUN")
+
 // Add your Javascript code here
 let URL = "https://jvvkjy8utk.execute-api.eu-central-1.amazonaws.com/tourist/api/countries/all"
 let api_key = "9f470b0b7f1440689e693427260903"
@@ -15,7 +39,7 @@ async function fetchData(){
 
 async function displayCountries(){
     let datas = await fetchData()
-    console.log(datas)
+    //console.log(datas)
     let index = 0;
     let sortedDatas = datas.sort((a, b)=> a.name.common.localeCompare(b.name.common))
     for(let country of sortedDatas){
@@ -42,7 +66,7 @@ async function displayBorderCapitals(borders){
             }
         }
     }
-    console.log(capitalNames)
+    //console.log(capitalNames)
     
         let enabledDiv = document.querySelector(".temp-enabled") //TARGET .querySelector
 /*         if(enabledDiv){
@@ -65,34 +89,34 @@ async function displayBorderCapitals(borders){
 
     }
     
-async function searchCountry(){
-    console.log("lefut")
+async function displayCapitalsWeather(){
+    //console.log("lefut")
     let city = document.querySelector(".city-enabled")
-    console.log("city", city)
+    //console.log("city", city)
     root.addEventListener("click", function(e){
-        console.log("e.target", e.target.parentElement)
+        //console.log("e.target", e.target.parentElement)
         if(!e.target.parentElement.classList.contains("city-enabled")) return
-        console.log("e.target in SEARCH:", e.target)
+        //console.log("e.target in SEARCH:", e.target)
         let temp_enabled = document.querySelector(".temp-enabled")
         let p = temp_enabled.querySelector("p")
         if(p){
             p.remove()
         }
-       console.log("temp_enabled", temp_enabled)
+       //console.log("temp_enabled", temp_enabled)
         let selectedCapital = e.target.textContent
-        console.log(selectedCapital)
+        //console.log(selectedCapital)
         fetchOne(selectedCapital, api_key).then(data=>{
             let temperature = data.current.temp_c
 
             let enabledElement = e.target.querySelectorAll(".city-temp-enabled")
-            console.log("enabledElement", enabledElement)
+            //console.log("enabledElement", enabledElement)
             if(enabledElement){
                 
                 let p = document.createElement("p")
                 p.innerHTML = `<br> ${temperature} C°`
                 p.classList.add("city-temp-enabled")
                 e.target.insertAdjacentElement("afterend", p)
-                console.log("p.parentElement", p.parentElement)
+                //console.log("p.parentElement", p.parentElement)
 
             }
             //div.parentElement.appendChild(div)
@@ -102,16 +126,13 @@ async function searchCountry(){
     })
 }
 
-searchCountry()
-
-
-
-
+displayCapitalsWeather()
 
 async function fetchOne(city, api_key){
     let finalURL = `http://api.weatherapi.com/v1/current.json?key=${api_key}&q=${city}`
     let res = await fetch(finalURL)
     let data = await res.json()
+    //console.log("fecthOneData:", data)
     return data
 }
 
@@ -155,7 +176,7 @@ function buttonEventListeners(){
         let currentLi = document.querySelector(".temp-enabled").parentElement
         let nextID=parseInt(currentLi.id)+1 //kövi id
         let nextLI = document.getElementById(nextID) //valódi kövi li
-        console.log("nextID", nextID)
+        //console.log("nextID", nextID)
         fetchOne(nextLI.textContent, api_key).then(data=>displayWeather(nextLI, data)) //e.target helyett nextLI -t adjuk át
         fetchBorders(nextLI.dataset.cca3).then(data=>displayBorderCapitals(data))
     }) 
@@ -193,7 +214,13 @@ function displayWeather(target, data){
         let div = document.createElement("div")
         div.classList.add("temp-enabled")
         let span = document.createElement("span")
-        span.textContent = `Temperature: ${data.current.temp_c}C°`
+
+        let iconURL = `https:${data.current.condition.icon}`
+
+        span.innerHTML = `
+        <img src="${iconURL}" alt="${data.current.condition.text}" />
+        Temperature: ${data.current.temp_c}°C
+        `
         span.enabled = true
         div.appendChild(span)
         target.appendChild(div)
@@ -202,3 +229,20 @@ function displayWeather(target, data){
 displayCountries()
 mainLIEventListener()
 buttonEventListeners()
+
+
+
+
+
+
+
+
+
+
+
+function getWeatherIcon(condition){
+    if(condition.includes("Sunny")) return "☀️"
+    if(condition.includes("Cloud")) return "☁️"
+    if(condition.includes("Rain")) return "🌧️"
+    return "🌡️"
+}
