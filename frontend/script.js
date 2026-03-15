@@ -209,10 +209,21 @@ function checkButtonDisable(id){
     }
 }
 //ITT HAGYTAM ABBA (+LEJEBB)
-/* async function displayCurrencies(cca3){
+async function displayCurrencies(target, cca3){
         let currencies = await convertToCurrencyByCCA3(cca3)
-        console.log(currencies)
-} */
+        console.log("currencies" ,currencies)
+        if(currencies!=null){
+            let div = document.createElement("div")
+            let eur = document.createElement("p")
+            let gbp = document.createElement("p")
+            eur.textContent = currencies.data.EUR
+            gbp.textContent = currencies.data.GBP
+            div.appendChild(eur)
+            div.appendChild(gbp)
+            target.appendChild(div)
+
+        }
+}
 
 
 async function displayWeather(target, data){
@@ -220,7 +231,7 @@ async function displayWeather(target, data){
 
         //Display Currency (később function):
     //ITT HAGYTAM ABBA 
-        displayCurrencies(target.dataset.cca3)
+        displayCurrencies(target, target.dataset.cca3)
 
         //...................................
 
